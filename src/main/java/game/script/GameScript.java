@@ -30,23 +30,17 @@ public class GameScript implements Iterable<Command>{
         }
     }
 
-    public Set<String> unigueUnitId() {
+    public List<String> unigueUnitId() {
         return commands.stream()
                 .filter(command -> command.getName().equals("addUnit"))
                 .map(command -> command.getArguments()[0])
-                .collect(
-                        () -> new HashSet<String>(),
-                        (set, id) -> set.add(id),
-                        (set1, set2) -> set1.addAll(set2)
-                );
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     public Map<String, Long> countAllCommands() {
         return commands.stream()
-                .collect(Collectors.groupingBy(
-                        Command::getName,
-                        Collectors.counting()
-                ))
+                .collect(Collectors.groupingBy(Command::getName, Collectors.counting()))
                 .entrySet()
                 .stream()
                 .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
@@ -56,6 +50,17 @@ public class GameScript implements Iterable<Command>{
                         (a, b) -> a,
                         LinkedHashMap::new
                 ));
+    }
+
+    public boolean containsCommandType(String command_name) {
+        return commands.stream()
+                .anyMatch(command -> command.getName().equals(command_name));
+    }
+
+    public Map<String, Long> countAllUnits() {
+        return commands.stream()
+                .filter(command -> command.getName().equals("addUnit"))
+                .collect(Collectors.groupingBy(command -> command.getArguments()[1], Collectors.counting()));
     }
 
     @Override
