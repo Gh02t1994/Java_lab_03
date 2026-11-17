@@ -63,6 +63,16 @@ public class GameScript implements Iterable<Command>{
                 .collect(Collectors.groupingBy(command -> command.getArguments()[1], Collectors.counting()));
     }
 
+    public List<String> unitsInArea(int x_min, int x_max) {
+        return commands.stream()
+                .filter(command -> command.getName().equals("addUnit"))
+                .filter(command -> Integer.parseInt(command.getArguments()[2]) >= x_min)
+                .filter(command -> Integer.parseInt(command.getArguments()[2]) <= x_max)
+                .map(command -> command.getArguments()[0])
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
     @Override
     public Iterator<Command> iterator() {
         return commands.iterator();

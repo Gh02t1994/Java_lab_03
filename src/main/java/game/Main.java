@@ -22,7 +22,6 @@ public class Main {
         script.add(new Command("startGame"));
         script.add(new Command("build", "build1", "barracks", "7", "7"));
         script.add(new Command("move", "unit1", "4", "4"));
-        script.add(new Command("print"));
 
         System.out.println("Команда, встречающаяся наиболее часто:\n" + script.mostPopularCommand());
 
@@ -39,6 +38,10 @@ public class Main {
 
         System.out.println('\n' + "Список сущностей, сгрупированный по количеству:");
         script.countAllUnits().forEach((key, value) -> System.out.println(key + " - " + value));
+
+        int x_min = 2, x_max = 3;
+        System.out.println("\nЮниты в области (" + x_min + ", " + x_max + "):");
+        script.unitsInArea(2, 3).forEach(x -> System.out.println(x));
         System.out.println();
 
         exec.run(script);
